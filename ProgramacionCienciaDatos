@@ -1,1 +1,16 @@
+# PROGRAMACIÓN CIENCIA DE DATOS
+
+## TEMA 9
+
+08/10/2026
+
+Los arrays mejoran la eficiencia en tiempo.
+
+ndarray: array n dimensional (n puede tener la dimensión que quieras)
+Se usa mucho en tratamiento de imágenes, se consideran los ejes como las dimensiones del vector.
+
+La librería es numpy (se importa como "np").
+
+ndarray: colección de datos de un mismo tipo que se almacenan como un bloque.
+
 
