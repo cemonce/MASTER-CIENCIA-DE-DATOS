@@ -72,10 +72,67 @@ Pandas: Para entrenar un modelo de Machine Learning necesitas pasar los datos a 
 
 Scikit-Learn: Aprendizaje automático (supervisado y no supervisado). Aprendizaje automático no necesita tarjetas gráficas (puede ir incluso más lento en la gráfica). Aprendizaje profundo sí.
 
+_________________________________________________________________________________________________
 
+# TEMA 4: Selección y evaluación de modelos.
 
+Buscar formas de decidir si el clustering a funcionado bien. Estas formas son numéricas, son métricas.
+Muchas de ellas están sesgadas hacia el K-Means.
 
+Para determinar el número óptimo de clústers se emplean también otras métricas, como el del codo para K-Means.
 
+- Precisión: Porcentaje de acierto entre los que has indicado como aciertos.
+- Recall: Si tengo cien gatos, cuantos he dicho que son gatos. Suele pasar en datasets muy desbalanceados, como el de transacciones fraudulentas. Se emplea para saber si ha detectado bien la clase minoritaria. En esos casos el recall alto es favorable.
 
+La matriz de confusión aporta información sobre esto.
+
+A veces es difícil diferenciar visualmente entre distintos algoritmos de clústering.
+
+Sirve para obtener los parámetros de inicialización ótpimos del DBSCAN.
+
+Hay cuatro tipos de evaluación:
+1. Tendencia de clustering: paso previo al estudio.
+- Antes de hacer clustering se debe estudiar si tiene sentido hacer grupos. 
+- Cuando hay más de dos o tres dimensiones se tienen que usar métricas obligatoriamente, porque no se entiende visualmente.
+- Se puede hacer con tests estadísticos (est. de Hopkins) o de forma visual (VAT).
+-- Estadístico de Hopkins: Distancia de cada punto a su vecino más cercano, dentro de una caja envolvente. Un valor cercano a 1 indica datos muy agrupados. 0.5 cuando los datos son aleatorios y uniformes. Si tienes un valor bajo se puede descartar que haya clusters, cuando el valor es cercano a 1 hay casos en los que puede no haber clusters. En pyclustertend se calcula 1-H, así que aquí los valores cercanos a 0 son los que tienen tendencia. SIRVE PARA **DESCARTAR** QUE HAYA CLUSTERS.
+-- VAT (visual assessment of cluster tendency): Cuando se ven cuadrados es que hay grupos, si no se ven los cuadrados claramente, es que no hay grupos. En datasets grandes puede ser demasiado calculo (n^2).
+-- pyclustertend es el paquete de Python par estos dos métodos.
+-- Se pueden implemetnar a mano con NearestNeighbors.
+2. Criterios internos: es la más importante.
+- Que los grupos sean compactos y que estén separados.
+- Muchos de estos criterios se basan en distancias euclídeas, por eso tienden al K-Means.
+- La inercia nos indica la cohesión del clúster.
+- Coeficiente de silueta: 
+-- Evalúa la cohesión de cada clúster y su separación con otros clústers. 
+-- Si los clústers están bien formados el número es cercano a 1.
+-- Lo ideal en la representación gráfica es que los grupos sean alargados y con el final plano/redondeado (no triangular), esto significa que los grupos tienen cohesión.
+- Coeficiente de Calinski-Harabasz:
+-- No tiene cota para los valores. La puntuación es mayor cuando los clústers están separados y tienen cohesión interna.
+- Índice de Davies-Bouldin:
+-- Los valores cercanos a 0 indican mejor partición.
+- Correlación cofenética:
+-- Funciona bien cuando no son clústers convexos. Solo funciona con clustering jerárquico aglomerativo, necesita el dendograma.
+-- No suelen salir valores negativos.
+- DBCV:
+-- Sirve para formas arbitrarias (clústers no convexos, por ejemplo), como las que funcionan bien con DBSCAN.
+-- El coeficiente de silueta puede equivocarse en el tipo de formas que funcionan bien para DBCV.
+3. Criterios externos: etiquetas.
+- Lo que acaba en score, cuanto más alto mejor, máximo 1.
+- Lo que acaba en loss, cuanto más bajo mejor. Mínimo 0.
+- La entropía indica la cantidad de información que necesitas para determinar si un punto pertenece a ese clúster.
+- Detección de patrones en el ruido:
+-- Si con ruido cambian mucho los clústers es que el algoritmo está mal. 
+-- Ante cambios pequeños de ruido, debe haber cambios pequeños en los clústers. No grandes cambios.
+4. Criterios relativos: método del codo, por ejemplo.
+
+ADVERTENCIAS PRÁCTICAS:
+- Sesgo hacia clústers convexos (sesgo hacia K-Means). Ocurre siempre que use distancias euclídeas.
+- Escalado y métrica. Las variables con valores altos suelen necesitar normalización.
+- Alta dimensión: todas las distancias se parecen.
+- Ningún criterio basta solo: intentar visualizar y aplicar tu conocimiento del dominio.
+
+¿EXISTE EL MEJOR CLUSTERING?
+- NO. Depende de cada caso.
 
 
